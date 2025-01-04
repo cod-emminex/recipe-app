@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes");
+const recipeRoutes = require("./routes/recipeRoutes");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -20,6 +21,7 @@ mongoose
 
 // Use Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/recipes", recipeRoutes);
 
 app.get("/api", (req, res) => {
   res.send("Hello from the backend!");
