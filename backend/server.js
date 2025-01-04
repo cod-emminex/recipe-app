@@ -13,11 +13,7 @@ app.use(express.json());
 // Connect to MongoDB
 mongoose
   .connect(
-    "mongodb+srv://emminex:<admin@recipe-app.stvvj.mongodb.net/?retryWrites=true&w=majority&appName=Recipe-app",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
+    "mongodb+srv://emminex:admin@recipe-app.stvvj.mongodb.net/?retryWrites=true&w=majority&appName=Recipe-app"
   )
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
