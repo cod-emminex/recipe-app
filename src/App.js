@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import RegisterForm from "./components/RegisterForm";
+import LoginForm from "./components/LoginForm";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -11,7 +13,9 @@ function App() {
 
   return (
     <div className="App">
-      <h1>{message}</h1>
+      <h1>Recipe App</h1>
+      <RegisterForm />
+      <LoginForm />
     </div>
   );
 }
