@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
 const Profile = () => {
   const [profile, setProfile] = useState({
@@ -15,14 +15,14 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("/api/profile/me", {
-          headers: {
-            "x-auth-token": localStorage.getItem("token"),
-          },
-        });
-        setProfile(res.data);
+        const res = await axiosInstance.get("/profile/me");
+        if (res && res.data) {
+          setProfile(res.data);
+        } else {
+          throw new Error("Invalid response from server");
+        }
       } catch (err) {
-        setError(err.response.data.msg);
+        setError(err.response?.data?.msg || "Error fetching profile");
       } finally {
         setLoading(false);
       }
@@ -37,14 +37,14 @@ const Profile = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put("/api/profile/me", profile, {
-        headers: {
-          "x-auth-token": localStorage.getItem("token"),
-        },
-      });
-      setProfile(res.data);
+      const res = await axiosInstance.put("/profile/me", profile);
+      if (res && res.data) {
+        setProfile(res.data);
+      } else {
+        throw new Error("Invalid response from server");
+      }
     } catch (err) {
-      setError(err.response.data.msg);
+      setError(err.response?.data?.msg || "Error updating profile");
     }
   };
 

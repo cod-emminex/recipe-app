@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]); // Initialize as an empty array
@@ -10,7 +10,7 @@ const RecipeList = () => {
     // Fetch recipes from the backend
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get("/api/recipes", {
+        const response = await axiosInstance.get("/recipes", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
