@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 
 const RecipeList = () => {
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState([]); // Initialize as an empty array
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState(null); // Add error state
 
   useEffect(() => {
+    // Fetch recipes from the backend
     const fetchRecipes = async () => {
       try {
         const response = await fetch("/api/recipes", {
@@ -11,15 +14,38 @@ const RecipeList = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
         const data = await response.json();
-        setRecipes(data);
+        if (Array.isArray(data)) {
+          setRecipes(data);
+        } else {
+          throw new Error("Data format is not an array");
+        }
       } catch (error) {
-        console.error("Failed to fetch recipes", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchRecipes();
   }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  if (recipes.length === 0) {
+    return <p>No recipes available</p>;
+  }
 
   return (
     <div>
