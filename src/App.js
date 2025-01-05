@@ -5,6 +5,13 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import RecipeList from "./components/RecipeList";
 import AddRecipe from "./components/AddRecipe";
+import withLoading from "./components/WithLoading";
+
+const MyComponentWithLoading = withLoading(MyComponent);
+const RegisterWithLoading = withLoading(Register);
+const LoginWithLoading = withLoading(Login);
+const RecipeListWithLoading = withLoading(RecipeList);
+const AddRecipeWithLoading = withLoading(AddRecipe);
 
 function App() {
   return (
@@ -12,15 +19,13 @@ function App() {
       <div className="App">
         <header className="App-header">
           <h1>Recipe App</h1>
-          <h2>React, Node, Express, MongoDB</h2>
-          <nav>What would you like to do?</nav>
         </header>
         <Routes>
-          <Route path="/" element={<MyComponent />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/recipes" element={<RecipeList />} />
-          <Route path="/add-recipe" element={<AddRecipe />} />
+          <Route path="/" element={<MyComponentWithLoading />} />
+          <Route path="/register" element={<RegisterWithLoading />} />
+          <Route path="/login" element={<LoginWithLoading />} />
+          <Route path="/recipes" element={<RecipeListWithLoading />} />
+          <Route path="/add-recipe" element={<AddRecipeWithLoading />} />
         </Routes>
       </div>
     </Router>
