@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]); // Initialize as an empty array
@@ -9,17 +10,17 @@ const RecipeList = () => {
     // Fetch recipes from the backend
     const fetchRecipes = async () => {
       try {
-        const response = await fetch("/api/recipes", {
+        const response = await axios.get("/api/recipes", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
 
-        const data = await response.json();
+        const data = response.data;
         if (Array.isArray(data)) {
           setRecipes(data);
         } else {

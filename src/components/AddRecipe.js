@@ -1,56 +1,73 @@
 import React, { useState } from "react";
+import axiosInstance from "../api/axiosInstance";
 
-const AddRecipeForm = () => {
-  const [title, setTitle] = useState("");
-  const [ingredients, setIngredients] = useState("");
-  const [instructions, setInstructions] = useState("");
-  const [message, setMessage] = useState("");
+const AddRecipe = () => {
+  const [formData, setFormData] = useState({
+    title: "",
+    ingredients: "",
+    instructions: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = async (e) => {
+  const { title, ingredients, instructions } = formData;
+
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
     try {
-      const response = await fetch("/api/recipes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ title, ingredients, instructions }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setMessage("Recipe added successfully!");
-      } else {
-        setMessage(data.message || "Failed to add recipe");
-      }
-    } catch (error) {
-      setMessage("An error occurred");
+      await axiosInstance.post("/recipes", formData);
+      // Optionally, you can redirect or update the state after successful creation
+    } catch (err) {
+      setError(err.response?.data?.msg || "Error creating recipe");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
       <h2>Add Recipe</h2>
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <textarea
-        placeholder="Ingredients"
-        value={ingredients}
-        onChange={(e) => setIngredients(e.target.value)}
-      />
-      <textarea
-        placeholder="Instructions"
-        value={instructions}
-        onChange={(e) => setInstructions(e.target.value)}
-      />
-      <button type="submit">Add Recipe</button>
-      {message && <p>{message}</p>}
-    </form>
+      <form onSubmit={onSubmit}>
+        <div>
+          <label>Title</label>
+          <input
+            type="text"
+            name="title"
+            value={title}
+            onChange={onChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Ingredients</label>
+          <textarea
+            name="ingredients"
+            value={ingredients}
+            onChange={onChange}
+            required
+          ></textarea>
+        </div>
+        <div>
+          <label>Instructions</label>
+          <textarea
+            name="instructions"
+            value={instructions}
+            onChange={onChange}
+            required
+          ></textarea>
+        </div>
+        <button type="submit" disabled={loading}>
+          {loading ? "Submitting..." : "Submit"}
+        </button>
+        {error && <div>Error: {error}</div>}
+      </form>
+    </div>
   );
 };
 
-export default AddRecipeForm;
+export default AddRecipe;
