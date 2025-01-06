@@ -49,11 +49,11 @@ const RecipeList = () => {
   }
 
   return (
-    <div>
-      <h2>Recipes</h2>
-      <ul>
+    <div className="container">
+      <h2 className="my-4">Recipes</h2>
+      <ul className="list-group">
         {recipes.map((recipe) => (
-          <li key={recipe._id}>
+          <li key={recipe._id} className="list-group-item">
             <h3>{recipe.title}</h3>
             <p>{recipe.ingredients}</p>
             <p>{recipe.instructions}</p>
